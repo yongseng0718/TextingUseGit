@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>3D 模型弹窗展示</title>
+  <!-- 引入 Model Viewer 脚本 -->
+  <script type="module" src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"></script>
+  <style>
+    /* 基本页面样式 */
+    body, html {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+      font-family: sans-serif;
+      background-color: #f0f0f0;
+    }
+    /* “View in 3D” 按钮样式 */
+    #openModalBtn {
+      display: block;
+      margin: 20px auto;
+      padding: 10px 20px;
+      font-size: 18px;
+      cursor: pointer;
+    }
+    /* 弹窗背景 */
+    .modal {
+      display: none; /* 默认隐藏 */
+      position: fixed;
+      z-index: 1;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      overflow: auto;
+      background-color: rgba(0,0,0,0.4);
+    }
+    /* 弹窗内容区域 */
+    .modal-content {
+      background-color: #fff;
+      margin: 5% auto; /* 上下边距5%，居中 */
+      padding: 20px;
+      border: 1px solid #888;
+      width: 80%;  /* 调整宽度，可以在70%-90%之间选择 */
+      height: 80vh; /* 高度为视窗高度的80% */
+      position: relative;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+    }
+    /* 关闭按钮样式 */
+    .close {
+      color: #aaa;
+      position: absolute;
+      top: 10px;
+      right: 25px;
+      font-size: 28px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+    .close:hover {
+      color: #000;
+    }
+    /* model-viewer 自适应弹窗区域 */
+    model-viewer {
+      width: 100%;
+      height: 100%;
+      display: block;
+    }
+  </style>
+</head>
+<body>
+  <!-- “View in 3D” 按钮 -->
+  <button id="openModalBtn">View in 3D</button>
+
+  <!-- 弹窗结构 -->
+  <div id="myModal" class="modal">
+    <div class="modal-content">
+      <span class="close" id="closeModalBtn">&times;</span>
+      <!-- 插入 model-viewer 组件 -->
+      <model-viewer src="images/sofa_48.glb"
+                    alt="3D 模型展示"
+                    auto-rotate
+                    camera-controls>
+      </model-viewer>
+    </div>
+  </div>
+
+
+  <!--3D 按钮-->
+  <script>
+    // 获取元素
+    const modal = document.getElementById("myModal");
+    const openModalBtn = document.getElementById("openModalBtn");
+    const closeModalBtn = document.getElementById("closeModalBtn");
+
+    // 点击按钮时打开弹窗
+    openModalBtn.addEventListener("click", function() {
+      modal.style.display = "block";
+    });
+
+    // 点击关闭按钮时关闭弹窗
+    closeModalBtn.addEventListener("click", function() {
+      modal.style.display = "none";
+    });
+
+    // 点击弹窗外部区域时关闭弹窗
+    window.addEventListener("click", function(event) {
+      if (event.target === modal) {
+        modal.style.display = "none";
+      }
+    });
+  </script>
+</body>
+</html>

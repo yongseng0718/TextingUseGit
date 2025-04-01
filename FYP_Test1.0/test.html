@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- 引入所需样式库 -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+  <!-- 自定义付款成功样式 -->
+  <style>
+    /* 仅保留必要自定义 */
+    .payment-success-popup {
+      border-radius: 6px !important;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15) !important; /* Stripe 风格阴影 */
+    }
+  
+    .payment-success-button {
+      background: linear-gradient(135deg, #635bff, #7d77ff) !important;
+      border: none !important;
+      padding: 12px 30px !important;
+      border-radius: 25px !important;
+      font-weight: 600 !important; /* Stripe 常用字重 */
+    }
+  </style>
+</head>
+<body>
+  <button onclick="showPaymentSuccess()">模拟付款成功</button>
+
+  <!-- 引入 SweetAlert2 -->
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  
+  <script>
+    function showPaymentSuccess() {
+      Swal.fire({
+        // --- 核心配置 ---
+        title: '<span style="color: var(--success-green)">付款成功！🎉</span>',
+        html: `
+          <div class="payment-details">
+            <p>💰 金额：<strong>$299.00</strong></p>
+            <p>📦 订单号：<code>#20231001-ABC123</code></p>
+            <p>预计 24 小时内发货</p>
+          </div>
+        `,
+        icon: 'success',
+        showConfirmButton: true,
+        confirmButtonText: '查看订单详情',
+        confirmButtonClass: 'payment-success-button',
+        showCancelButton: true,
+        cancelButtonText: '继续购物',
+
+        // --- 视觉增强 ---
+        customClass: {
+          popup: 'payment-success-popup animate__animated',
+          title: 'payment-title'
+        },
+        background: '#f8fff8',  // 浅绿色背景
+        showClass: {
+          popup: 'animate__zoomIn'  // 入场动画
+        },
+        hideClass: {
+          popup: 'animate__zoomOut' // 退场动画
+        },
+
+        // --- 交互细节 ---
+        timer: 5000,              // 5秒后自动关闭
+        timerProgressBar: true,   // 显示进度条
+        footer: '<a href="/contact">遇到问题？联系客服</a>'
+      }).then((result) => {
+        if (result.isConfirmed) {
+          window.location.href = 'http://127.0.0.1:3000/test2.html'; // 跳转订单页
+        }
+      });
+    }
+  </script>
+
+
+</body>
+</html>

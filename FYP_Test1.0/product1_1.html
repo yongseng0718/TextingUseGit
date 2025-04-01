@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>现代简约办公桌 - 家具商店</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+</head>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Arial', sans-serif;
+        }
+
+        .container {
+            max-width: 95%;
+            margin: 20px auto;
+            padding: 20px;
+            display: flex;
+            gap: 30px; /* 调整间距 */
+        }
+
+        /* 图片展示区域 */
+        .gallery {
+            flex: 0 0 60%; /* 直接使用60%不再需要计算 */
+            height: 610px; /* 增加高度 */
+            display: flex;
+            gap: 15px;
+        }
+
+        .thumbnails {
+            width: 100px; /* 固定缩略图列宽度 */
+        }
+
+
+        .thumbnails img {
+            width: 90px;
+            height: 90px;
+            object-fit: cover;
+            cursor: pointer;
+            border: 2px solid #ddd;
+            transition: 0.3s;
+            border-radius: 5px;
+            margin-bottom:10px ;
+        }
+
+        .thumbnails img.active,
+        .thumbnails img:hover {
+            border-color: #666;
+        }
+
+        .main-image {
+            flex: 1;
+            position: relative;
+            overflow: hidden; /* 防止图片溢出 */
+            width: calc(100%); /* 动态计算剩余空间 */
+        }
+
+        .main-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            cursor: zoom-in;
+        }
+
+        /* 箭头样式 */
+        .arrow {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(0,0,0,0.5);
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            cursor: pointer;
+            font-size: 20px;
+            border-radius: 50%;
+            transition: background 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .arrow:hover {
+            background: rgba(0,0,0,0.8);
+        }
+
+        .left-arrow {
+            left: 15px;
+        }
+
+        .right-arrow {
+            right: 15px;
+        }
+
+        /* 产品详情 */
+        .product-info {
+            flex: 0 0 calc(40% - 15px); /* 占据40%宽度并考虑间距 */
+            padding: 20px;
+            position: sticky;
+            top: 20px;
+            height: fit-content;
+        }
+
+        .product-title {
+            font-size: 26px;
+            margin-bottom: 15px;
+            color: #2c3e50;
+        }
+
+/* 价格部分样式 */
+.pricing {
+    display: flex;
+    align-items: baseline;
+    gap: 10px;
+    margin: 20px 0;
+    align-items: center;
+}
+
+.original-price {
+    font-size: 20px;
+    color: #999;
+    text-decoration: line-through; /* 显示删除线 */
+}
+
+.discounted-price {
+    font-size: 28px;
+    color: #e74c3c;
+    font-weight: bold;
+}
+
+.discount-badge {
+    background: #e74c3c;
+    color: #fff;
+    padding: 3px 8px;
+    font-size: 14px;
+    border-radius: 5px;
+}
+
+
+        .description {
+            line-height: 1.6;
+            color: #666;
+            margin-bottom: 25px;
+        }
+
+        .color-options {
+            margin: 20px 0;
+        }
+
+        .color-option {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: inline-block;
+            margin-right: 10px;
+            cursor: pointer;
+            border: 2px solid #ddd;
+        }
+
+        .color-option.selected {
+            border-color: #333;
+        }
+
+        .add-to-cart {
+            width: 100%;
+            padding: 15px;
+            background: #2c3e50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 18px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .add-to-cart:hover {
+            background: #34495e;
+        }
+
+        .fullscreen-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.9);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            cursor: zoom-out;
+        }
+
+        .fullscreen-image {
+            max-width: 90%;
+            max-height: 90%;
+            object-fit: contain;
+            cursor: default;
+        }
+
+        .close-btn {
+            position: absolute;
+            top: 30px;
+            right: 30px;
+            color: white;
+            font-size: 40px;
+            cursor: pointer;
+            padding: 0 15px;
+        }
+                
+        /* 分割线样式 */
+        .divider {
+            border-top: 1px solid #ccc; /* 设置顶部边框作为分割线 */
+            margin: 20px 0; /* 上下间距 */
+            width: 100%; /* 让分割线填充整个宽度 */
+        }
+              
+        
+.product-reviews {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin: 15px 0;
+}
+
+.rating {
+    display: flex;
+    gap: 3px;
+    align-items: center;
+}
+
+.star-icon {
+    font-size: 20px;
+    color: #ccc; /* 默认星星颜色 */
+}
+
+.star-icon.filled {
+    color: #FFD700; /* 满星颜色 */
+}
+
+.rating-score, .review-count, .sold-count {
+    font-size: 16px;
+    color: #444;
+}
+
+.review-count{
+    padding: 0 10px 0 10px;
+}
+
+         /* 商品简单的描述 */
+        .specs-table {
+            width: 100%;
+            margin-bottom: 25px;
+            border-collapse: collapse;
+        }
+
+        .specs-table td {
+            padding: 12px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .specs-table td:first-child {
+            font-weight: bold;
+            width: 30%;
+        }
+
+    </style>
+</head>
+<body>
+
+    <div class="fullscreen-overlay" onclick="closeFullscreen()">
+        <span class="close-btn">&times;</span>
+        <img src="" class="fullscreen-image" onclick="event.stopPropagation()">
+    </div>
+
+    <div class="container">
+        <!-- 图片展示 -->
+        <div class="gallery">
+            <div class="thumbnails">
+                <img src="images/table1.png" alt="缩略图1" class="active" onclick="changeImage('images/table1.png', this)">
+                <img src="images/table6.png" alt="缩略图4" onclick="changeImage('images/table6.png', this)">
+                <img src="images/table2.png" alt="缩略图2" onclick="changeImage('images/table1.png', this)">
+                <img src="images/table3.png" alt="缩略图3" onclick="changeImage('images/table5.png', this)">
+                <img src="images/table4.png" alt="缩略图4" onclick="changeImage('images/table5.png', this)">
+                <img src="images/table6.png" alt="缩略图4" onclick="changeImage('images/table6.png', this)">
+            </div>
+            <div class="main-image">
+                <img src="images/table1.png" alt="产品主图" id="mainImg">
+                <button class="arrow left-arrow">❮</button>
+                <button class="arrow right-arrow">❯</button>
+            </div>
+        </div>
+
+        <!-- 产品信息 -->
+        <div class="product-info">
+            <h1 class="product-title">现代简约办公桌</h1>
+                <div class="product-reviews">
+                    <!-- 评分分数 -->
+                    <span class="rating-score">4.0</span>
+                    <!-- 星星评分区域 -->
+                    <span class="rating">
+                        <!-- 这里假设4颗满星、1颗空星 -->
+                        <p class="star-icon filled">★</p>
+                        <p class="star-icon filled">★</p>
+                        <p class="star-icon filled">★</p>
+                        <p class="star-icon filled">★</p>
+                        <p class="star-icon">★</p>
+                    </span>                    
+                    <!-- 评论次数 -->
+                    <span class="review-count">(123 reviews)</span>
+                    <!-- 销售数量 -->
+                    <span class="sold-count">已售 456</span>
+                </div>
+            
+                <!-- 价格部分 -->
+                <div class="pricing">
+                    <span class="discounted-price">￥2,499</span>
+                    <span class="original-price">￥2,999</span>
+                    <span class="discount-badge">16% OFF</span>
+                </div>
+
+                <div class="divider"></div>
+                
+            <p class="description">
+                这款现代简约风格的办公桌采用优质E1级环保板材，搭配坚固金属支架。
+                尺寸：160×80×75cm，多抽屉设计满足收纳需求，圆角设计保障使用安全。
+            </p>
+
+            <table class="specs-table">
+                <tr><td>材质</td><td>高弹性网布 + 铝合金框架</td></tr>
+                <tr><td>颜色</td><td>高级黑色风格</td></tr>
+                <tr><td>尺寸(cm)</td><td>120 × 60 × 75</td></tr>
+            </table>            
+
+            <div class="color-options">
+                <div class="color-option selected" style="background: #966F33" onclick="selectColor(this)"></div>
+                <div class="color-option" style="background: #2C3E50" onclick="selectColor(this)"></div>
+                <div class="color-option" style="background: #BDC3C7" onclick="selectColor(this)"></div>
+            </div>
+
+            <button class="add-to-cart" onclick="addToCart()">加入购物车</button>
+
+            
+        </div>
+    </div>
+
+    
+    <script>
+        // 切换主图
+        function changeImage(src, thumb) {
+            document.getElementById('mainImg').src = src;
+            document.querySelectorAll('.thumbnails img').forEach(img => img.classList.remove('active'));
+            thumb.classList.add('active');
+        }
+
+        // 选择颜色
+        function selectColor(color) {
+            document.querySelectorAll('.color-option').forEach(c => c.classList.remove('selected'));
+            color.classList.add('selected');
+        }
+
+        // 修改数量
+        function changeQuantity(change) {
+            const input = document.getElementById('quantity');
+            let value = parseInt(input.value) + change;
+            input.value = value < 1 ? 1 : value;
+        }
+
+        // 加入购物车
+        function addToCart() {
+            const count = document.querySelector('.cart-count');
+            count.textContent = parseInt(count.textContent) + 1;
+            alert('商品已加入购物车！');
+        }
+
+        // 防止数量输入非数字
+        document.getElementById('quantity').addEventListener('change', function() {
+            this.value = Math.max(1, parseInt(this.value) || 1);
+        });
+
+        
+        // 初始化图片数据
+        const thumbnails = document.querySelectorAll('.thumbnails img');
+        const images = Array.from(thumbnails).map(img => img.src);
+        let currentImageIndex = 0;
+
+        // 更新主图函数
+        function updateMainImage() {
+            const mainImg = document.getElementById('mainImg');
+            mainImg.src = images[currentImageIndex];
+            thumbnails.forEach((img, index) => {
+                img.classList.toggle('active', index === currentImageIndex);
+            });
+        }
+
+        // 缩略图点击事件
+        thumbnails.forEach((thumbnail, index) => {
+            thumbnail.addEventListener('click', () => {
+                currentImageIndex = index;
+                updateMainImage();
+            });
+        });
+
+        // 箭头切换事件
+        document.querySelector('.left-arrow').addEventListener('click', () => {
+            currentImageIndex = (currentImageIndex - 1 + images.length) % images.length;
+            updateMainImage();
+        });
+
+        document.querySelector('.right-arrow').addEventListener('click', () => {
+            currentImageIndex = (currentImageIndex + 1) % images.length;
+            updateMainImage();
+        });
+
+        // 新增全屏预览功能
+        const overlay = document.querySelector('.fullscreen-overlay');
+        const fullscreenImg = document.querySelector('.fullscreen-image');
+
+        // 点击主图打开全屏
+        document.getElementById('mainImg').addEventListener('click', openFullscreen);
+
+        function openFullscreen() {
+            fullscreenImg.src = document.getElementById('mainImg').src;
+            overlay.style.display = 'flex';
+            document.body.style.overflow = 'hidden'; // 禁用页面滚动
+        }
+
+        function closeFullscreen() {
+            overlay.style.display = 'none';
+            document.body.style.overflow = 'auto'; // 恢复页面滚动
+        }
+
+        // 键盘ESC键关闭支持
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && overlay.style.display === 'flex') {
+                closeFullscreen();
+            }
+        });
+
+    </script>
+</body>
+</html>

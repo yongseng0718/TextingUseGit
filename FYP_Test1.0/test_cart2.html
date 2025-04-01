@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>购物车 - 列式布局</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Arial', sans-serif;
+        }
+
+        body {
+            background-color: #f5f5f5;
+            padding: 20px;
+        }
+
+        .cart-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .cart-header {
+            display: grid;
+            grid-template-columns: 120px 2fr 1fr 150px 1fr 1fr 80px;
+            padding: 15px 0;
+            font-weight: bold;
+            color: #666;
+            border-bottom: 2px solid #eee;
+            margin-bottom: 20px;
+        }
+
+        .header-item {
+            padding: 0 10px;
+        }
+
+        .cart-item {
+            display: grid;
+            grid-template-columns: 120px 2fr 1fr 150px 1fr 1fr 80px;
+            align-items: center;
+            padding: 20px 0;
+            border-bottom: 1px solid #f5f5f5;
+        }
+
+        .product-image {
+            width: 80px;
+            height: 80px;
+            object-fit: cover;
+            border-radius: 8px;
+        }
+
+        .product-name {
+            font-weight: 600;
+            color: #333;
+            padding: 0 15px;
+        }
+
+        .product-category {
+            color: #666;
+            font-size: 0.9em;
+            padding: 0 15px;
+        }
+
+        .quantity-control {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 0 15px;
+        }
+
+        .quantity-btn {
+            width: 28px;
+            height: 28px;
+            border: 1px solid #ddd;
+            background: transparent;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .quantity-btn:hover {
+            border-color: #999;
+        }
+
+        .price-column {
+            padding: 0 15px;
+            text-align: right;
+            color: #333;
+        }
+
+        .total-price {
+            color: #e91e63;
+            font-weight: 600;
+        }
+
+        .delete-btn {
+            background: none;
+            border: none;
+            color: #999;
+            cursor: pointer;
+            padding: 8px;
+            transition: all 0.3s;
+        }
+
+        .delete-btn:hover {
+            color: #ff4444;
+        }
+
+        .cart-footer {
+            margin-top: 30px;
+            text-align: right;
+            padding-top: 20px;
+        }
+
+        .grand-total {
+            font-size: 20px;
+            color: #333;
+            margin-bottom: 20px;
+        }
+
+        .checkout-btn {
+            padding: 12px 40px;
+            background: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: all 0.3s;
+        }
+
+        .checkout-btn:hover {
+            background: #45a049;
+        }
+        /* 新增/修改的样式 */
+        .cart-header,
+        .cart-item {
+            grid-template-columns: 120px 2fr 1fr 150px 1fr 1fr 80px;
+            justify-items: center; /* 新增水平居中 */
+            align-items: center;   /* 新增垂直居中 */
+        }
+
+        .header-item,
+        .cart-item > * {
+            width: 100%;           /* 新增宽度限制 */
+            text-align: center;    /* 强制文本居中 */
+            padding: 0 5px;       /* 调整内边距 */
+        }
+
+        /* 调整特定元素对齐 */
+        .product-image {
+            display: block;        /* 使图片居中 */
+            margin: 0 auto;
+        }
+
+        .quantity-control {
+            justify-content: center; /* 按钮组居中 */
+        }
+
+        /* 移除原有特定边距 */
+        .product-name,
+        .product-category {
+            padding: 0;
+        }
+
+        /* 价格列居中修正 */
+        .price-column {
+            text-align: center !important;
+        }
+    </style>
+
+    </style>
+</head>
+<body>
+    <div class="cart-container">
+        <!-- 表头 -->
+        <div class="cart-header">
+            <div class="header-item">图片</div>
+            <div class="header-item">商品名称</div>
+            <div class="header-item">类型</div>
+            <div class="header-item">数量</div>
+            <div class="header-item">单价</div>
+            <div class="header-item">总价</div>
+            <div class="header-item">操作</div>
+        </div>
+
+        <!-- 商品项 -->
+        <div class="cart-item">
+            <img src="https://picsum.photos/200/300" class="product-image" alt="商品">
+            <div class="product-name">时尚运动鞋</div>
+            <div class="product-category">鞋类</div>
+            <div class="quantity-control">
+                <button class="quantity-btn" onclick="updateQuantity(this, -1)">-</button>
+                <span class="quantity">1</span>
+                <button class="quantity-btn" onclick="updateQuantity(this, 1)">+</button>
+            </div>
+            <div class="price-column">¥599.00</div>
+            <div class="price-column total-price">¥599.00</div>
+            <button class="delete-btn" onclick="removeItem(this)">🗑️</button>
+        </div>
+
+        <!-- 更多商品... -->
+        
+        <div class="cart-footer">
+            <div class="grand-total">总计：¥<span id="grandTotal">0.00</span></div>
+            <button class="checkout-btn">去结算</button>
+        </div>
+    </div>
+
+    <script>
+        // 初始化计算总价
+        calculateTotal();
+
+        function updateQuantity(button, change) {
+            const quantityElement = button.parentElement.querySelector('.quantity');
+            let quantity = parseInt(quantityElement.textContent);
+            quantity += change;
+            
+            if (quantity < 1) quantity = 1;
+            
+            quantityElement.textContent = quantity;
+            updateItemTotal(button.closest('.cart-item'));
+            calculateTotal();
+        }
+
+        function updateItemTotal(item) {
+            const price = parseFloat(item.querySelector('.price-column').textContent.replace('¥',''));
+            const totalElement = item.querySelector('.total-price');
+            const quantity = parseInt(item.querySelector('.quantity').textContent);
+            totalElement.textContent = `¥${(price * quantity).toFixed(2)}`;
+        }
+
+        function removeItem(button) {
+            const item = button.closest('.cart-item');
+            item.remove();
+            calculateTotal();
+        }
+
+        function calculateTotal() {
+            const totals = document.querySelectorAll('.total-price');
+            let grandTotal = 0;
+            
+            totals.forEach(total => {
+                grandTotal += parseFloat(total.textContent.replace('¥',''));
+            });
+            
+            document.getElementById('grandTotal').textContent = grandTotal.toFixed(2);
+        }
+    </script>
+</body>
+</html>

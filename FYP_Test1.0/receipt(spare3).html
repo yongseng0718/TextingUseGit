@@ -1,0 +1,286 @@
+<?php 
+session_start();
+include "db_connect.php"; // 连接数据库
+$conn = open_connection();
+
+$_SESSION['order_id'] = 17;
+
+// 查询多个字段
+$sql = "SELECT *
+        FROM orders 
+        WHERE order_id = ?";
+
+$stmt = $conn->prepare($sql);
+$stmt->bind_param("i", $_SESSION['order_id']);
+$stmt->execute();
+$result = $stmt->get_result();
+$row = $result->fetch_assoc();
+
+// 提取数据
+$user_id = $row['user_id'];
+$email = $row['email'];
+$full_name = $row['full_name'];
+$phone = $row['phone'];
+$address_line = $row['address_line'];
+$postal_code = $row['postal_code'];
+$city = $row['city'];
+$state = $row['state'];
+$total_price = $row['total_price'];
+$status = $row['status'];
+$created_at = isset($row['created_at']) ? date("d F Y, g:i:s A", strtotime($row['created_at'])) : 'unknown time';
+$shipping_full_name = $row['shipping_full_name'];
+$shipping_phone = $row['shipping_phone'];
+$shipping_address_line = $row['shipping_address_line'];
+$shipping_postal_code = $row['shipping_postal_code'];
+$shipping_city = $row['shipping_city'];
+$shipping_state = $row['shipping_state'];
+$payment_method = $row['payment_method'];
+
+
+// 获取 orders_item 表的数据
+$order_items = [];
+$sql_items = "SELECT product_id, quantity, price FROM order_items WHERE order_id = ?";
+$stmt_items = $conn->prepare($sql_items);
+$stmt_items->bind_param("i", $_SESSION['order_id']);
+$stmt_items->execute();
+$result_items = $stmt_items->get_result();
+
+while ($row_item = $result_items->fetch_assoc()) {
+    $order_items[] = $row_item;
+}
+
+?>
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Order Receipt</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f5f5f5;
+      padding: 20px;
+    }
+
+    .container {
+      max-width: 800px;
+      margin: auto;
+      background-color: #fff;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+      text-align: center;
+    }
+
+    /* 顶部感谢信息 */
+    .thank-you {
+      font-size: 25px;
+      font-weight: bold;
+      color: #6c8a47; /* 绿色调 */
+      border: 2px dashed #6c8a47;
+      padding: 25px;
+      margin-bottom: 30px;
+    }
+
+    /* 订单信息 */
+    .order-info {
+      display: flex;
+      justify-content: space-between;
+      text-align: center;
+      padding: 20px 0;
+      border-top: 0px solid #ddd;
+      border-bottom: 0px solid #ddd;
+    }
+
+    .order-info div {
+      flex: 1;
+      padding: 0 10px;
+      position: relative;
+    }
+
+    /* 只显示右边的边界线 */
+    .order-info div:not(:last-child) {
+      border-right: 2px solid #ddd;
+    }
+
+    .order-info span {
+      font-weight: bold;
+      display: block;
+      color: #727272;
+    }
+
+    .highlight {
+      font-weight: bold;
+      color: #000 !important;
+    }
+
+    .email_notification{
+        text-align: left !important;
+    }
+
+    /* Product Table */
+    .order-details {
+      margin: 2rem 0;
+    }
+
+    .product-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 1.5rem 0;
+    }
+
+    .product-table th {
+      background: var(--primary-color);
+      color: white;
+      padding: 12px;
+      text-align: left;
+    }
+
+    .product-table td {
+      padding: 12px;
+      border-bottom: 1px solid #eee;
+    }
+
+    .product-table tr:nth-child(even) {
+      background: #f8f8f8;
+    }
+
+    /* Total Section */
+    .total-section {
+      text-align: right;
+      margin-top: 1.5rem;
+    }
+
+    .total-line {
+      display: inline-block;
+      min-width: 250px;
+      padding: 0.8rem 1.5rem;
+    }
+
+    .total-line div {
+      display: flex;
+      justify-content: space-between;
+      margin: 0.5rem 0;
+    }
+
+    .grand-total {
+      font-size: 1.3em;
+      font-weight: bold;
+      color: var(--primary-color);
+      border-top: 2px solid var(--primary-color);
+      padding-top: 0.8rem;
+    }
+    
+    :root {
+      --primary-color: #4a7c59;
+      --secondary-color: #8fb996;
+      --text-color: #454545;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <!-- 顶部感谢信息 -->
+    <div class="thank-you">
+      Thank You for Your Purchase!
+    </div>
+
+    <!-- 订单信息 -->
+    <div class="order-info">
+
+      <div>
+        <span>Order ID</span> 
+        <p></p>
+        <span class="highlight"><?php echo $_SESSION['order_id']; ?></span>
+      </div>
+
+      <div>
+        <span>Date</span>
+        <p></p> 
+        <span class="highlight"><?php echo $created_at; ?></span>
+      </div>
+
+      <div>
+        <span>Total</span> 
+        <p></p>
+        <span class="highlight">RM <?php echo number_format($total_price, 2); ?></span>
+      </div>
+
+      <div>
+        <span>Payment method</span> 
+        <p></p>
+        <span class="highlight"><?php echo $payment_method; ?></span>
+      </div>
+
+    </div>
+
+    <div class="email_notification">
+        <p>We have sent a payment receipt to email address (<?php echo $email; ?>). Please check your inbox.</p>
+    </div>
+
+    <!-- Product Table -->
+    <section class="order-details">
+      <table class="product-table">
+        <thead>
+          <tr>
+            <th>Product</th>
+            <th>Price</th>
+            <th>Quantity</th>
+            <th>Total</th>
+          </tr>
+        </thead>
+        <tbody>
+          <?php 
+          $subtotal = 0;
+          foreach ($order_items as $item) {
+              $total = $item['price'] * $item['quantity'];
+              $subtotal += $total;
+              
+          ?>
+          <tr>
+            <td data-label="Product"><?php echo $item['product_id']; ?></td>
+            <td data-label="Price">RM<?php echo number_format($item['price'], 2); ?></td>
+            <td data-label="Quantity"><?php echo $item['quantity']; ?></td>
+            <td data-label="Total">RM<?php echo number_format($total, 2); ?></td>
+          </tr>
+
+          <?php } ?>
+        </tbody>
+      </table>
+    </section>
+
+    <!-- Total Section -->
+    <div class="total-section">
+      <div class="total-line">
+        <div>
+          <span>Subtotal:</span>
+          <span>RM <?php echo number_format($subtotal, 2); ?></span>
+        </div>
+        <div>
+          <span>Shipping:</span>
+          <span>RM15.00</span>
+        </div>
+        <div class="grand-total">
+          <span>Grand Total:</span>
+          <span>RM<?php echo number_format($total_price, 2); ?></span>
+        </div>
+      </div>
+    </div> 
+    
+    <div class="billing-info">
+      <div>
+        <span>Billing Details</span>
+        <p>Full name</p>
+        <p>Phone</p>
+        <p>123 Street, City, Country</p>
+      </div>
+      <div><span>Shipping Address</span><p>Same as billing</p></div>
+    </div>
+
+  </div>
+
+</body>
+</html>

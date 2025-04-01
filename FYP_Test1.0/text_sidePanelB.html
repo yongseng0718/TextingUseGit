@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>抽屉示例</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    .translate-x-full {
+      transform: translateX(100%);
+    }
+    #drawer {
+      border-radius: 20px 0 0 20px;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- 页面主体 -->
+  <main class="min-vh-100 d-flex align-items-center justify-content-center">
+    <button id="openDrawer" class="btn btn-primary">
+      打开抽屉
+    </button>
+  </main>
+
+  <!-- 遮罩层 -->
+  <div id="overlay" class="fixed-top vh-100 vw-100 bg-dark opacity-50" style="display: none; z-index: 1040;"></div>
+
+  <!-- 侧边栏 -->
+  <div id="drawer" 
+       class="position-fixed top-0 end-0 vh-100 bg-white shadow-lg translate-x-full"
+       style="width: 100%; max-width: 33%; transition: transform 0.3s ease; z-index: 1050;">
+    
+    <!-- 关闭按钮 -->
+    <button id="closeDrawer" class="position-absolute top-0 end-0 mt-3 me-3 btn btn-link text-secondary fs-3 p-2 text-decoration-none">×</button>
+
+    <!-- 内容 -->
+    <div class="p-5 pt-5">
+      <h2 class="h1 fw-bold mb-4">Guest Checkout</h2>
+      <p class="mb-4 text-muted">You'll have the opportunity to create a personal account after checkout.</p>
+      
+      <button class="w-100 btn btn-dark btn-lg mb-4">
+        Continue as Guest
+      </button>
+
+      <div class="d-flex align-items-center my-4">
+        <div class="flex-grow-1 border-top"></div>
+        <span class="px-3 text-muted">OR</span>
+        <div class="flex-grow-1 border-top"></div>
+      </div>
+
+      <h3 class="h2 fw-semibold mb-4">Log in to your account</h3>
+      
+      <div>
+        <div class="mb-3">
+          <label class="form-label">Email</label>
+          <input type="email" class="form-control" placeholder="Enter your email">
+        </div>
+
+        <div class="mb-4">
+          <label class="form-label">Password</label>
+          <input type="password" class="form-control" placeholder="Enter your password">
+        </div>
+
+        <button class="w-100 btn btn-outline-secondary btn-lg">
+          Log In
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const openDrawer = document.getElementById("openDrawer");
+    const closeDrawer = document.getElementById("closeDrawer");
+    const drawer = document.getElementById("drawer");
+    const overlay = document.getElementById("overlay");
+
+    openDrawer.addEventListener("click", () => {
+      drawer.classList.remove("translate-x-full");
+      overlay.style.display = 'block';
+    });
+
+    const closeFunction = () => {
+      drawer.classList.add("translate-x-full");
+      overlay.style.display = 'none';
+    };
+
+    closeDrawer.addEventListener("click", closeFunction);
+    overlay.addEventListener("click", closeFunction);
+  </script>
+</body>
+</html>

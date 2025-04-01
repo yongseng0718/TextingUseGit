@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>购物车</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Arial', sans-serif;
+        }
+
+        body {
+            background-color: #f5f5f5;
+            padding: 20px;
+        }
+
+        .cart-container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .cart-header {
+            font-size: 24px;
+            color: #333;
+            margin-bottom: 30px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #eee;
+        }
+
+        .cart-item {
+            display: flex;
+            align-items: center;
+            padding: 20px 0;
+            border-bottom: 1px solid #eee;
+        }
+
+        .product-image {
+            width: 120px;
+            height: 120px;
+            object-fit: cover;
+            border-radius: 8px;
+            margin-right: 20px;
+        }
+
+        .product-info {
+            flex: 1;
+        }
+
+        .product-name {
+            font-size: 18px;
+            color: #333;
+            margin-bottom: 5px;
+        }
+
+        .product-category {
+            color: #666;
+            font-size: 14px;
+            margin-bottom: 10px;
+        }
+
+        .quantity-control {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .quantity-btn {
+            width: 30px;
+            height: 30px;
+            border: none;
+            background: #f0f0f0;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        .quantity-btn:hover {
+            background: #e0e0e0;
+        }
+
+        .quantity {
+            font-size: 16px;
+            min-width: 30px;
+            text-align: center;
+        }
+
+        .price {
+            font-size: 16px;
+            color: #333;
+            margin-left: 20px;
+            min-width: 100px;
+            text-align: right;
+        }
+
+        .total-price {
+            color: #e91e63;
+            font-weight: bold;
+            margin-left: 20px;
+            min-width: 100px;
+            text-align: right;
+        }
+
+        .delete-btn {
+            margin-left: 20px;
+            padding: 8px 15px;
+            background: #ff4444;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .cart-footer {
+            margin-top: 30px;
+            text-align: right;
+            padding-top: 20px;
+            border-top: 2px solid #eee;
+        }
+
+        .grand-total {
+            font-size: 20px;
+            color: #333;
+            margin-bottom: 20px;
+        }
+
+        .checkout-btn {
+            padding: 12px 30px;
+            background: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+    </style>
+</head>
+<body>
+    <div class="cart-container">
+        <h2 class="cart-header">购物车</h2>
+        
+        <!-- 购物车商品 -->
+        <div class="cart-item">
+            <img src="https://picsum.photos/200/300" class="product-image" alt="商品图片">
+            <div class="product-info">
+                <h3 class="product-name">时尚运动鞋</h3>
+                <p class="product-category">鞋类</p>
+                <div class="quantity-control">
+                    <button class="quantity-btn" onclick="updateQuantity(this, -1)">-</button>
+                    <span class="quantity">1</span>
+                    <button class="quantity-btn" onclick="updateQuantity(this, 1)">+</button>
+                </div>
+            </div>
+            <div class="price">¥599.00</div>
+            <div class="total-price">¥599.00</div>
+            <button class="delete-btn" onclick="removeItem(this)">删除</button>
+        </div>
+
+        <!-- 更多商品... -->
+        
+        <div class="cart-footer">
+            <div class="grand-total">总计：¥<span id="grandTotal">0.00</span></div>
+            <button class="checkout-btn">去结算</button>
+        </div>
+    </div>
+
+    <script>
+        // 初始化计算总价
+        calculateTotal();
+
+        function updateQuantity(button, change) {
+            const quantityElement = button.parentElement.querySelector('.quantity');
+            let quantity = parseInt(quantityElement.textContent);
+            quantity += change;
+            
+            if (quantity < 1) quantity = 1;
+            
+            quantityElement.textContent = quantity;
+            updateItemTotal(button.closest('.cart-item'));
+            calculateTotal();
+        }
+
+        function updateItemTotal(item) {
+            const price = parseFloat(item.querySelector('.price').textContent.replace('¥',''));
+            const totalElement = item.querySelector('.total-price');
+            const quantity = parseInt(item.querySelector('.quantity').textContent);
+            totalElement.textContent = `¥${(price * quantity).toFixed(2)}`;
+        }
+
+        function removeItem(button) {
+            const item = button.closest('.cart-item');
+            item.remove();
+            calculateTotal();
+        }
+
+        function calculateTotal() {
+            const totals = document.querySelectorAll('.total-price');
+            let grandTotal = 0;
+            
+            totals.forEach(total => {
+                grandTotal += parseFloat(total.textContent.replace('¥',''));
+            });
+            
+            document.getElementById('grandTotal').textContent = grandTotal.toFixed(2);
+        }
+    </script>
+</body>
+</html>

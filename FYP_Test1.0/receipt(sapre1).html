@@ -1,0 +1,284 @@
+<?php 
+session_start();
+
+include "db_connect.php"; // 连接数据库
+$conn = open_connection();
+
+    // 提取付款时间
+    $sql = "SELECT created_at FROM orders WHERE order_id = ?";
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param("i", $_SESSION['order_id']);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    $row = $result->fetch_assoc();
+    $created_at = $row['created_at'];
+
+    // 格式化时间
+    $created_at = isset($row['created_at']) ? date("d F Y, g:i:s A", strtotime($row['created_at'])) : 'unknown time';
+?>
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Order Receipt</title>
+  <style>
+    :root {
+      --primary-color: #4a7c59;
+      --secondary-color: #8fb996;
+      --text-color: #454545;
+    }
+
+    body {
+      font-family: 'Segoe UI', system-ui, sans-serif;
+      background-color: #f9f9f9;
+      padding: 2rem;
+      color: var(--text-color);
+    }
+
+    .container {
+      max-width: 840px;
+      margin: 0 auto;
+      background: white;
+      padding: 2.5rem;
+      border-radius: 12px;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+    }
+
+    /* Header Section */
+    .header {
+      text-align: center;
+      margin-bottom: 2rem;
+      padding-bottom: 1.5rem;
+      border-bottom: 2px solid var(--primary-color);
+    }
+
+    .logo {
+      max-width: 180px;
+      margin-bottom: 1rem;
+    }
+
+    .company-info {
+      font-size: 0.9em;
+      color: #666;
+      line-height: 1.6;
+    }
+
+    /* Order Summary */
+    .order-summary {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1.5rem;
+      margin: 2rem 0;
+      padding: 1.5rem;
+      background: #f8faf7;
+      border-radius: 8px;
+    }
+
+    .summary-item {
+      text-align: center;
+    }
+
+    .summary-item h3 {
+      font-size: 0.95em;
+      color: var(--primary-color);
+      margin: 0 0 0.5em;
+    }
+
+    .summary-item p {
+      font-size: 1.1em;
+      margin: 0;
+      font-weight: 600;
+      color: var(--text-color);
+    }
+
+    /* Product Table */
+    .order-details {
+      margin: 2rem 0;
+    }
+
+    .product-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 1.5rem 0;
+    }
+
+    .product-table th {
+      background: var(--primary-color);
+      color: white;
+      padding: 12px;
+      text-align: left;
+    }
+
+    .product-table td {
+      padding: 12px;
+      border-bottom: 1px solid #eee;
+    }
+
+    .product-table tr:nth-child(even) {
+      background: #f8f8f8;
+    }
+
+    /* Total Section */
+    .total-section {
+      text-align: right;
+      margin-top: 1.5rem;
+    }
+
+    .total-line {
+      display: inline-block;
+      min-width: 250px;
+      padding: 0.8rem 1.5rem;
+    }
+
+    .total-line div {
+      display: flex;
+      justify-content: space-between;
+      margin: 0.5rem 0;
+    }
+
+    .grand-total {
+      font-size: 1.3em;
+      font-weight: bold;
+      color: var(--primary-color);
+      border-top: 2px solid var(--primary-color);
+      padding-top: 0.8rem;
+    }
+
+    /* Payment Info */
+    .payment-info {
+      background: #f8faf7;
+      padding: 1.5rem;
+      border-radius: 8px;
+      margin-top: 2rem;
+    }
+
+    .payment-info p {
+      margin: 0.5em 0;
+    }
+
+    /* Footer */
+    .footer {
+      text-align: center;
+      margin-top: 2rem;
+      padding-top: 1.5rem;
+      border-top: 1px solid #eee;
+      font-size: 0.9em;
+      color: #666;
+    }
+
+    @media (max-width: 600px) {
+      .container {
+        padding: 1.5rem;
+      }
+
+      .order-summary {
+        grid-template-columns: 1fr;
+      }
+
+      .product-table thead {
+        display: none;
+      }
+
+      .product-table td {
+        display: block;
+        text-align: right;
+      }
+
+      .product-table td::before {
+        content: attr(data-label);
+        float: left;
+        font-weight: bold;
+        color: var(--primary-color);
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <!-- Header -->
+    <header class="header">
+      <img src="your-logo.png" alt="Company Logo" class="logo">
+      <div class="company-info">
+        <p>GreenLeaf Organic Shop<br>
+        📞 +603-1234 5678<br>
+        📍 123 Eco Street, Kuala Lumpur</p>
+      </div>
+    </header>
+
+    <!-- Order Summary -->
+    <div class="order-summary">
+      <div class="summary-item">
+        <h3>Order Number</h3>
+        <p>#12345</p>
+      </div>
+      <div class="summary-item">
+        <h3>Order Date</h3>
+        <p>2023-08-15</p>
+      </div>
+      <div class="summary-item">
+        <h3>Payment Method</h3>
+        <p>Direct Bank In</p>
+      </div>
+    </div>
+
+    <!-- Product Table -->
+    <section class="order-details">
+      <table class="product-table">
+        <thead>
+          <tr>
+            <th>Product</th>
+            <th>Price</th>
+            <th>Quantity</th>
+            <th>Total</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td data-label="Product">Organic Coconut Oil (500ml)</td>
+            <td data-label="Price">RM45.00</td>
+            <td data-label="Quantity">2</td>
+            <td data-label="Total">RM90.00</td>
+          </tr>
+          <!-- Add more product rows -->
+        </tbody>
+      </table>
+    </section>
+
+    <!-- Total Section -->
+    <div class="total-section">
+      <div class="total-line">
+        <div>
+          <span>Subtotal:</span>
+          <span>RM1,072.50</span>
+        </div>
+        <div>
+          <span>Shipping:</span>
+          <span>RM15.00</span>
+        </div>
+        <div class="grand-total">
+          <span>Grand Total:</span>
+          <span>RM1,087.50</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Payment Info -->
+    <div class="payment-info">
+      <p>📧 Payment receipt sent to: test123@email.com</p>
+      <p>💳 Payment Status: Completed (15 Aug 2023 14:30)</p>
+      <p>📦 Expected Delivery Date: 18-20 Aug 2023</p>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+      <p>Thank you for shopping with us!<br>
+      Need help? Contact us at support@greenleaf.com<br>
+      <a href="#">Return Policy</a> | <a href="#">Track Order</a></p>
+    </footer>
+  </div>
+
+</body>
+</html>

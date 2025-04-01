@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Order Receipt</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f8f9fa;
+      padding: 20px;
+    }
+
+    .container {
+      max-width: 800px;
+      margin: auto;
+      background: #fff;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .header {
+      text-align: center;
+      padding-bottom: 20px;
+      border-bottom: 2px solid #ddd;
+    }
+
+    .thank-you {
+      font-size: 24px;
+      font-weight: bold;
+      color: #2d572c;
+      background: #e6f4ea;
+      padding: 15px;
+      border-radius: 8px;
+      margin-bottom: 20px;
+    }
+
+    .order-info, .billing-info {
+      display: flex;
+      justify-content: space-between;
+      padding: 15px 0;
+      border-bottom: 1px solid #ddd;
+    }
+
+    .order-info div, .billing-info div {
+      flex: 1;
+      text-align: center;
+    }
+
+    .order-info span, .billing-info span {
+      font-weight: bold;
+      color: #555;
+      display: block;
+    }
+
+    .highlight {
+      font-size: 18px;
+      font-weight: bold;
+      color: #333;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+    }
+
+    th, td {
+      border: 1px solid #ddd;
+      padding: 10px;
+      text-align: left;
+    }
+
+    th {
+      background: #6c8a47;
+      color: white;
+    }
+
+    .footer {
+      text-align: center;
+      margin-top: 20px;
+      font-size: 14px;
+      color: #666;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <h2>Company Logo</h2>
+    </div>
+
+    <div class="thank-you">Thank you. Your order has been received.</div>
+
+    <div class="order-info">
+      <div><span>Order Number</span><p class="highlight">12345</p></div>
+      <div><span>Date</span><p class="highlight"><?php echo $created_at; ?></p></div>
+      <div><span>Total</span><p class="highlight">RM 1,072.50</p></div>
+      <div><span>Payment Method</span><p class="highlight">Direct Bank In</p></div>
+    </div>
+
+    <div class="billing-info">
+      <div><span>Billing Details</span><p>John Doe, johndoe@email.com</p><p>123 Street, City, Country</p></div>
+      <div><span>Shipping Address</span><p>Same as billing</p></div>
+    </div>
+
+    <table>
+      <tr>
+        <th>Product</th>
+        <th>Quantity</th>
+        <th>Price</th>
+      </tr>
+      <tr>
+        <td>Wooden Chair</td>
+        <td>2</td>
+        <td>RM 500.00</td>
+      </tr>
+      <tr>
+        <td>Table Lamp</td>
+        <td>1</td>
+        <td>RM 72.50</td>
+      </tr>
+    </table>
+
+    <div class="footer">If you have any questions, contact us at support@company.com</div>
+  </div>
+</body>
+</html>

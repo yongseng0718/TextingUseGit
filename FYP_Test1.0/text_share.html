@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>分享按钮示例</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"> <!-- 引入 Font Awesome -->
+    <style>
+.share-container {
+    display: flex;
+    gap: 0px;
+    align-items: center; /* 确保所有子项垂直居中 */
+}
+
+/* 修复标题样式 */
+.share-title {
+    margin: 0; /* 清除h2默认的上下边距 */
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 16px; /* 添加与图标匹配的字体大小 */
+    line-height: 1; /* 防止文字行高影响对齐 */
+}
+
+.share-title i {
+  font-size: 0.9em; /* 相对于标题文字的比例缩放 */
+}
+
+/* 确保所有图标容器具有相同的高度 */
+.share-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    font-size: 24px;
+    color: #333;
+    text-decoration: none; /* 移除链接下划线 */
+}
+
+/* 修复 Font Awesome 图标的基线对齐问题 */
+.fab, .fas {
+    vertical-align: middle; /* 关键：解决图标基线对齐问题 */
+}
+
+.share-btn:hover{
+    transition-duration: 0.5s;
+    transform: scale(1.2);
+}
+    </style>
+</head>
+<body>
+
+    <div class="share-container">
+        <p class="share-title" style="margin-right:10px ;">
+            <i class="fas fa-share-alt"></i> Share with:
+        </p>
+        <a id="whatsapp-share" target="_blank">
+            <i class="fab fa-whatsapp share-btn"></i> <!-- WhatsApp 图标 -->
+        </a>
+        <a id="facebook-share" target="_blank">
+            <i class="fab fa-facebook share-btn"></i> <!-- Facebook 图标 -->
+        </a>
+        <a id="twitter-share" target="_blank">
+            <i class="fab fa-twitter share-btn"></i> <!-- Twitter 图标 -->
+        </a>
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const url = encodeURIComponent(window.location.href);
+            const text = encodeURIComponent("Online Furniture");
+
+            // 动态设置不同社交平台的分享链接
+            document.getElementById("whatsapp-share").href = `https://api.whatsapp.com/send?text=${text}%20${url}`;
+            document.getElementById("facebook-share").href = `https://www.facebook.com/sharer/sharer.php?u=${url}`;
+            document.getElementById("twitter-share").href = `https://twitter.com/intent/tweet?text=${text}&url=${url}`;
+        });
+    </script>
+
+</body>
+</html>

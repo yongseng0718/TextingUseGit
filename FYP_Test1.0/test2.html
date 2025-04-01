@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        .quantity-control {
+            display: flex;
+            align-items: center;
+        }
+
+        .quantity-btn {
+            width: 32px;
+            height: 32px;
+            border: 1px solid #ddd;
+            background-color: #f8f8f8;
+            cursor: pointer;
+            font-size: 16px;
+            border-radius: 4px;
+            transition: background-color 0.2s;
+        }
+
+        .quantity-btn:hover {
+            background-color: #e0e0e0;
+        }
+
+        .quantity-input {
+            width: 50px;
+            height: 30px;
+            text-align: center;
+            border: 1px solid #ddd;
+            margin: 0 5px;
+            font-size: 16px;
+        }
+
+        /* 隐藏Chrome/Safari的上下箭头 */
+        .quantity-input::-webkit-outer-spin-button,
+        .quantity-input::-webkit-inner-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+        
+    </style>
+</head>
+<body>
+    <div class="quantity-control">
+        <button class="quantity-btn minus-btn">&minus;</button>
+        <input type="number" class="quantity-input" value="1" min="1">
+        <button class="quantity-btn plus-btn">+</button>
+    </div>
+
+    <script>
+        const quantityInput = document.querySelector('.quantity-input');
+        const plusBtn = document.querySelector('.plus-btn');
+        const minusBtn = document.querySelector('.minus-btn');
+
+        // 增加数量
+        plusBtn.addEventListener('click', () => {
+            quantityInput.value = parseInt(quantityInput.value) + 1;
+        });
+
+        // 减少数量
+        minusBtn.addEventListener('click', () => {
+            const currentValue = parseInt(quantityInput.value);
+            if (currentValue > 1) {
+                quantityInput.value = currentValue - 1;
+            }
+        });
+
+        // 输入验证
+        quantityInput.addEventListener('change', () => {
+            if (isNaN(quantityInput.value) || quantityInput.value < 1) {
+                quantityInput.value = 1;
+            }
+        });
+    </script>
+</body>
+</html>
